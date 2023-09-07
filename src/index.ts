@@ -1,6 +1,3 @@
-import crypto from "crypto";
-import axios, { type AxiosError } from "axios";
-import { DateTime } from "luxon";
 import {
   CreatePaymentRequest,
   CreatePaymentResponse,
@@ -8,6 +5,8 @@ import {
   GetAllPaymentsResponse,
   GetPaymentRequest,
 } from "./types/payments";
+import { makeAuthorizedRequest, makeRequest } from "./utils";
+import crypto from "crypto";
 
 const BASE_URLS = {
   production: "https://authservices.satispay.com",
@@ -17,10 +16,16 @@ const BASE_URLS = {
 type SatispayClientOptions = {
   keyId: string;
   privateKey: string;
-  baseUrl?: "production" | "sandbox";
+
+  /**
+   * The environment to use for the API calls.
+   *
+   * @default "production"
+   */
+  environment?: "production" | "sandbox";
 };
 
-class SatispayClient {
+export default class SatispayClient {
   private keyId: string;
 
   private privateKey: string;
@@ -30,7 +35,7 @@ class SatispayClient {
   constructor(options: SatispayClientOptions) {
     this.keyId = options.keyId;
     this.privateKey = options.privateKey;
-    this.baseUrl = BASE_URLS[options.baseUrl || "production"];
+    this.baseUrl = BASE_URLS[options.environment || "production"];
   }
 
   public payments = {
@@ -116,104 +121,75 @@ class SatispayClient {
     path: string,
     body?: unknown,
     headers?: Record<string, string>
-  ): Promise<
-    | {
-        success: true;
-        data: T;
-      }
-    | {
-        success: false;
-        error: unknown;
-      }
-  > {
-    const url = `${this.baseUrl}${path}`;
-
-    try {
-      const authHeaders = this.getAuthHeaders({
-        body: body ? JSON.stringify(body, null, 2) : "",
-        httpVerb: method,
-        httpBaseUrl: this.baseUrl,
-        httpEndpoint: path,
-      });
-
-      const requestHeaders = {
-        ...headers,
-        ...authHeaders,
-        accept: "application/json",
-        "content-type": "application/json",
-      };
-
-      const response = await axios.request<T>({
-        method,
-        url,
-        headers: requestHeaders,
-        data: body,
-      });
-
-      return {
-        success: true,
-        data: response.data as T,
-      };
-    } catch (err: AxiosError | unknown) {
-      if (axios.isAxiosError(err)) {
-        return {
-          success: false,
-          error: (err as AxiosError).response?.data,
-        };
-      }
-
-      return {
-        success: false,
-        error: err,
-      };
-    }
-  }
-
-  private getAuthHeaders({
-    body,
-    httpVerb,
-    httpBaseUrl,
-    httpEndpoint,
-  }: {
-    body: string;
-    httpVerb: "GET" | "POST" | "PUT" | "DELETE";
-    httpBaseUrl: string;
-    httpEndpoint: string;
-  }) {
-    const keyId = this.keyId;
-    const privateKey = this.privateKey;
-
-    const digest = `SHA-256=`.concat(
-      crypto.createHash("sha256").update(body).digest("base64")
-    );
-
-    const headers = {
-      "(request-target)": `${httpVerb.toLowerCase()} ${httpEndpoint}`,
-      host: httpBaseUrl,
-      date: DateTime.now().toFormat("EEE, dd MMM yyyy HH:mm:ss O"),
-      digest,
-    };
-
-    const string =
-      `(request-target): ${headers["(request-target)"]}\n` +
-      `host: ${headers.host}\n` +
-      `date: ${headers.date}\n` +
-      `digest: ${headers.digest}`;
-
-    const signature = crypto
-      .createSign("RSA-SHA256")
-      .update(string)
-      .sign(privateKey, "base64");
-
-    const authorizationHeader = `Signature keyId="${keyId}", algorithm="rsa-sha256", headers="(request-target) host date digest", signature="${signature}"`;
-
-    return {
-      Host: headers.host,
-      Date: headers.date,
-      Digest: headers.digest,
-      Authorization: authorizationHeader,
-    };
+  ) {
+    return makeAuthorizedRequest<T>({
+      baseUrl: this.baseUrl,
+      keyId: this.keyId,
+      privateKey: this.privateKey,
+      method,
+      path,
+      body,
+      headers,
+    });
   }
 }
 
-export default SatispayClient;
+type SatispayAuthenticationAuthenticateWithTokenOptions = {
+  token: string;
+
+  /**
+   * The RSA publicKey key to use for the API calls.
+   */
+  publicKey: string;
+
+  /**
+   * The environment to use for the API calls.
+   *
+   * @default "production"
+   */
+  environment?: "production" | "sandbox";
+};
+
+export class SatispayAuthentication {
+  public static async authenticateWithToken({
+    token,
+    publicKey,
+    environment,
+  }: SatispayAuthenticationAuthenticateWithTokenOptions) {
+    const baseUrl = BASE_URLS[environment || "production"];
+    const path = "/g_business/v1/authentication_keys";
+
+    const response = await makeRequest<{
+      key_id: string;
+    }>({
+      method: "POST",
+      url: `${baseUrl}${path}`,
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: { public_key: publicKey, token },
+    });
+
+    return response;
+  }
+
+  public static async generateKeyPair() {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync("rsa", {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+        type: "spki",
+        format: "pem",
+      },
+      privateKeyEncoding: {
+        type: "pkcs8",
+        format: "pem",
+      },
+    });
+
+    return {
+      publicKey,
+      privateKey,
+    };
+  }
+}
