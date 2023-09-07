@@ -87,7 +87,7 @@ export default class SatispayClient {
      *  4. save the last payment id returned at step 3,
      *  5. repeat step 4 until you reach the last payment of the date you need.
      */
-    getAll: (request: GetAllPaymentsRequest) => {
+    getAll: (request: GetAllPaymentsRequest = {}) => {
       const params = [] as Array<[string, string]>;
 
       if (request.status) {
