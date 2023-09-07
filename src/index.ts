@@ -130,7 +130,7 @@ class SatispayClient {
 
     try {
       const authHeaders = this.getAuthHeaders({
-        body: body ? JSON.stringify(body) : "",
+        body: body ? JSON.stringify(body, null, 2) : "",
         httpVerb: method,
         httpBaseUrl: this.baseUrl,
         httpEndpoint: path,
