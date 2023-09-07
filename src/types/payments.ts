@@ -48,3 +48,35 @@ export type CreatePaymentResponse = {
   external_code: string;
   redirect_url: string;
 };
+
+// Get payment
+export type GetPaymentRequest = {
+  id: string;
+};
+
+export type GetPaymentResponse = {
+  id: string;
+  code_identifier: string;
+  type: "TO_BUSINESS" | "REFUND_TO_BUSINESS";
+  amount_unit: number;
+  currency: string;
+  status: "PENDING" | "ACCEPTED" | "CANCELED" | "AUTHORIZED";
+  expired: boolean;
+  metadata: object;
+  sender: {
+    id: string;
+    type: "CONSUMER";
+    name: string;
+  };
+  receiver: {
+    id: string;
+    type: "SHOP";
+  };
+  daily_closure: {
+    id: string;
+    date: string;
+  };
+  insert_date: string;
+  expire_date: string;
+  external_code: string;
+};

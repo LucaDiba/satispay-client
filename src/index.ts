@@ -1,7 +1,11 @@
 import crypto from "crypto";
 import axios, { type AxiosError } from "axios";
 import { DateTime } from "luxon";
-import { CreatePaymentRequest, CreatePaymentResponse } from "./types/payments";
+import {
+  CreatePaymentRequest,
+  CreatePaymentResponse,
+  GetPaymentRequest,
+} from "./types/payments";
 
 const BASE_URLS = {
   production: "https://authservices.satispay.com",
@@ -55,6 +59,13 @@ class SatispayClient {
         "POST",
         "/g_business/v1/payments",
         data
+      );
+    },
+
+    get: (request: GetPaymentRequest) => {
+      return this.request<CreatePaymentResponse>(
+        "GET",
+        `/g_business/v1/payments/${request.id}`
       );
     },
   };
