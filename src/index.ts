@@ -4,6 +4,8 @@ import { DateTime } from "luxon";
 import {
   CreatePaymentRequest,
   CreatePaymentResponse,
+  GetAllPaymentsRequest,
+  GetAllPaymentsResponse,
   GetPaymentRequest,
 } from "./types/payments";
 
@@ -67,6 +69,45 @@ class SatispayClient {
         "GET",
         `/g_business/v1/payments/${request.id}`
       );
+    },
+
+    /**
+     * 
+     * Payments returned by this API are paginated with a default limit of 20 items. The has_more boolean field tells you if there are more payments than the limit used and you should use the startingAfter parameters filled with the id of the last payment if you want to retrieve the next page of the list.
+
+     *  If you want to list all Payments for specific date you should:
+     *  1. call getAll() using the parameter startingAfterTimestamp and using the timestamp in milliseconds of the date you want,
+     *  2. save the last payment id returned at step 1,
+     *  3. call getAll() using the parameter startingAfter and using the payment id you saved at the step 2,
+     *  4. save the last payment id returned at step 3,
+     *  5. repeat step 4 until you reach the last payment of the date you need.
+     */
+    getAll: (request: GetAllPaymentsRequest) => {
+      const params = [] as Array<[string, string]>;
+
+      if (request.status) {
+        params.push(["status", request.status]);
+      }
+
+      if (request.limit) {
+        params.push(["limit", request.limit.toString()]);
+      }
+
+      if (request.startingAfter) {
+        params.push(["starting_after", request.startingAfter]);
+      }
+
+      if (request.startingAfterTimestamp) {
+        params.push([
+          "starting_after_timestamp",
+          request.startingAfterTimestamp,
+        ]);
+      }
+
+      const queryParams = new URLSearchParams(params);
+      const path = `/g_business/v1/payments?${queryParams.toString()}`;
+
+      return this.request<GetAllPaymentsResponse>("GET", path);
     },
   };
 
