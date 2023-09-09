@@ -1,5 +1,11 @@
 # @lucadiba/satispay-client
 
+## 0.1.3
+
+### Patch Changes
+
+- 70c6d7d: Fix publish workflow
+
 ## 0.1.2
 
 ### Patch Changes
