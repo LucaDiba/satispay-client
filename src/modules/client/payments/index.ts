@@ -1,14 +1,14 @@
+import { Api } from "../api";
+import { CreatePayment } from "./api/create";
+import { GetPayment } from "./api/get";
+import { GetAllPayments } from "./api/get-all";
+import { UpdatePayment } from "./api/update";
 import {
   CreatePaymentRequest,
   GetAllPaymentsRequest,
   GetPaymentRequest,
   UpdatePaymentRequest,
 } from "./types";
-import { Api } from "../api";
-import { GetPayment } from "./api/get";
-import { GetAllPayments } from "./api/get-all";
-import { UpdatePayment } from "./api/update";
-import { CreatePayment } from "./api/create";
 
 export class Payments extends Api {
   /**

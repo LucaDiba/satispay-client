@@ -3,6 +3,7 @@
   "plugins": [
     "@typescript-eslint",
     "import",
+    "simple-import-sort",
     "prettier"
   ],
   "extends": [
@@ -14,5 +15,9 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.eslint.json"
+  },
+  "rules": {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error"
   }
 }

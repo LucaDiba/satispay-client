@@ -1,6 +1,6 @@
-import { ClientOptions } from ".";
 import { BASE_URLS } from "../../const";
 import { makeAuthorizedRequest } from "../../utils";
+import { ClientOptions } from ".";
 
 export class Api {
   protected options: ClientOptions;
