@@ -81,6 +81,15 @@ satispay.payments.get({
 satispay.payments.getAll();
 ```
 
+### Update a payment
+
+```typescript
+satispay.payments.update({
+  id: "payment_id",
+  action: "CANCEL",
+});
+```
+
 ## Authentication
 
 The Satispay API uses an authentication method based on a RSA key pair. You can generate a new key pair using the `generateKeyPair` method:

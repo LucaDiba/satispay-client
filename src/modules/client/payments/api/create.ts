@@ -1,5 +1,5 @@
-import { CreatePaymentRequest, CreatePaymentResponse } from "./types";
-import { Api } from "../api";
+import { CreatePaymentRequest, CreatePaymentResponse } from "../types";
+import { Api } from "../../api";
 
 export class CreatePayment extends Api {
   public do = (request: CreatePaymentRequest) => {

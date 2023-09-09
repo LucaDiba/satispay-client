@@ -5,10 +5,10 @@ import {
   UpdatePaymentRequest,
 } from "./types";
 import { Api } from "../api";
-import { CreatePayment } from "./create";
-import { GetPayment } from "./get";
-import { GetAllPayments } from "./get-all";
-import { UpdatePayment } from "./update";
+import { GetPayment } from "./api/get";
+import { GetAllPayments } from "./api/get-all";
+import { UpdatePayment } from "./api/update";
+import { CreatePayment } from "./api/create";
 
 export class Payments extends Api {
   /**
