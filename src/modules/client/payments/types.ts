@@ -185,3 +185,47 @@ export type GetAllPaymentsResponse = {
     external_code: string;
   }>;
 };
+
+// Update payment
+export type UpdatePaymentRequest = {
+  /**
+   * The ID of the payment to update.
+   */
+  id: string;
+
+  /**
+   * The update action to perform.
+   */
+  action: "ACCEPT" | "CANCEL" | "CANCEL_OR_REFUND";
+
+  /**
+   * Amount of the payment in cents when using the `FUND_LOCK` flow.
+   */
+  amountUnit?: number;
+};
+
+export type UpdatePaymentResponse = {
+  id: string;
+  type: string;
+  amount_unit: number;
+  currency: string;
+  status: "ACCEPTED" | "CANCELED";
+  expired: boolean;
+  metadata: Record<string, unknown>;
+  sender: {
+    id: string;
+    type: "CONSUMER";
+    name: string;
+  };
+  receiver: {
+    id: string;
+    type: "SHOP";
+  };
+  daily_closure: {
+    id: string;
+    date: string;
+  };
+  insert_date: string;
+  expire_date: string;
+  external_code: string;
+};
