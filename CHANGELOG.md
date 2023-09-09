@@ -1,5 +1,11 @@
 # @lucadiba/satispay-client
 
+## 0.1.2
+
+### Patch Changes
+
+- Add keywords
+
 ## 0.1.1
 
 ### Patch Changes
