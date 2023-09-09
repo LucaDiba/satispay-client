@@ -23,7 +23,7 @@ export function getAuthHeaders({
 
   const headers = {
     "(request-target)": `${httpVerb.toLowerCase()} ${httpEndpoint}`,
-    host: httpBaseUrl,
+    host: httpBaseUrl.replace("https://", ""),
     date: DateTime.now().toFormat("EEE, dd MMM yyyy HH:mm:ss O"),
     digest,
   };
@@ -117,7 +117,7 @@ export async function makeAuthorizedRequest<T>({
   const authHeaders = getAuthHeaders({
     keyId: keyId,
     privateKey: privateKey,
-    body: body ? JSON.stringify(body, null, 2) : "",
+    body: body ? JSON.stringify(body) : "",
     httpVerb: method,
     httpBaseUrl: baseUrl,
     httpEndpoint: path,
