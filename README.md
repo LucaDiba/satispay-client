@@ -1,7 +1,7 @@
-<h1 align="center">Satispay client</h1>
+<h1 align="center">Satispay Node.js client</h1>
 <h2 align="center">⚠️ This package is in alpha ⚠️</h2>
 
-> A JavaScript client for Satispay APIs with built-in TypeScript types.<br />
+> A JavaScript Node.js client for Satispay APIs with built-in TypeScript types.<br />
 > This package supports both ESM and CommonJS.
 
 <p align="center">
@@ -126,4 +126,4 @@ Contributions, issues and feature requests are welcome!
 ## License
 
 Copyright © 2022 [Luca Dibattista](https://github.com/LucaDiba).<br />
-This project is MIT licensed.
+This project is [MIT](https://github.com/LucaDiba/satispay-client/blob/main/LICENSE) licensed.

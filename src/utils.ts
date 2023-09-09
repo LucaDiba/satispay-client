@@ -2,7 +2,7 @@ import axios, { type AxiosError } from "axios";
 import crypto from "crypto";
 import { DateTime } from "luxon";
 
-export function getAuthHeaders({
+function getAuthHeaders({
   keyId,
   privateKey,
   body,
