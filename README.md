@@ -1,5 +1,5 @@
 <h1 align="center">Satispay Node.js client</h1>
-<h2 align="center">⚠️ This package is in alpha ⚠️</h2>
+<h2 align="center">⚠️ This package is in beta ⚠️</h2>
 
 > A JavaScript Node.js client for Satispay APIs with built-in TypeScript types.<br />
 > This package supports both ESM and CommonJS.
@@ -97,14 +97,15 @@ The Satispay API uses an authentication method based on a RSA key pair. You can 
 ```typescript
 import Satispay from "@lucadiba/satispay-client";
 
-const { publicKey, privateKey } = Satispay.Authentication.generateKeyPair();
+const { publicKey, privateKey } =
+  await Satispay.Authentication.generateKeyPair();
 ```
 
 Then, you can use the `authenticateWithToken` method to get the `keyId` needed to initialize the client.
 The token is a 6 characters string that you can find in the Satispay Business Dashboard. It can only be used once, so you need to save the `keyId`, which can be reused and does not expire.
 
 ```typescript
-const { keyId } = Satispay.Authentication.authenticateWithToken({
+const { keyId } = await Satispay.Authentication.authenticateWithToken({
   token: "623ECX",
   publicKey,
 });
