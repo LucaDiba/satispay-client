@@ -1,11 +1,36 @@
 // Create payment
 type BaseCreatePaymentRequest = {
+  /**
+   * Amount of the payment in cents.
+   */
   amountUnit: number;
+
+  /**
+   * Currency of the payment (only EUR currently supported).
+   */
   currency: "EUR";
-  externalCode?: string; // max 50 chars
+
+  /**
+   * Order ID or payment external identifier (max length allowed is 50 chars).
+   */
+  externalCode?: string;
+
+  /**
+   * The url that will be called with an HTTP GET request when the payment changes state. When the url is called, "get payment details" can be called to know the new payment status. Note that `{uuid}` will be replaced with the payment ID.
+   *
+   * @example "https://example.com/my_callback_url?payment_id={uuid}"
+   */
   callbackUrl?: string;
+
+  /**
+   * The url to redirect the user after the payment flow is completed (it must be a web link / universal link).
+   */
   redirectUrl?: string;
-  expirationDate?: string; // ISO 8601
+
+  /**
+   * The expiration date of the payment.
+   */
+  expirationDate?: string;
 };
 
 export type CreatePaymentRequest =
@@ -14,14 +39,32 @@ export type CreatePaymentRequest =
     } & BaseCreatePaymentRequest)
   | ({
       flow: "PRE_AUTHORIZED";
+
+      /**
+       * Pre-authorized token ID.
+       *
+       * Required with the `PRE_AUTHORIZED` flow only.
+       */
       preAuthorizedPaymentsToken: string;
     } & BaseCreatePaymentRequest)
   | ({
       flow: "MATCH_USER";
+
+      /**
+       * Unique ID of the consumer that has to accept the payment. To retrieve the customer ID use the "retrive customer" API.
+       *
+       * Required with the `MATCH_USER` flow only.
+       */
       consumerUid: string;
     } & BaseCreatePaymentRequest)
   | ({
       flow: "REFUND";
+
+      /**
+       * Unique ID of the payment to refund.
+       *
+       * Required with the `REFUND` flow only.
+       */
       parentPaymentUid: string;
     } & BaseCreatePaymentRequest);
 
@@ -51,6 +94,9 @@ export type CreatePaymentResponse = {
 
 // Get payment
 export type GetPaymentRequest = {
+  /**
+   * The ID of the payment to retrieve.
+   */
   id: string;
 };
 
@@ -83,9 +129,26 @@ export type GetPaymentResponse = {
 
 // Get all payments
 export type GetAllPaymentsRequest = {
+  /**
+   * Filter by the payment status `ACCEPTED`, `PENDING` or `CANCELED`.
+   *
+   * @default "ACCEPTED"
+   */
   status?: "ACCEPTED" | "PENDING" | "CANCELED";
-  limit?: number; // A number between 1 and 100
+
+  /**
+   * A limit on the number of objects to be returned, between 1 and 100.
+   */
+  limit?: number;
+
+  /**
+   * Is the ID that defines your place in the list when you make a payment list request.
+   */
   startingAfter?: string;
+
+  /**
+   * Is the timestamp (in milliseconds) that defines your place in the list when you make a payment list request
+   */
   startingAfterTimestamp?: string;
 };
 

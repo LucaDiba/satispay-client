@@ -27,22 +27,22 @@ npm install @lucadiba/satispay-client
 Import the package in your Node.js application:
 
 ```typescript
-import SatispayClient from "@lucadiba/satispay-client";
+import Satispay from "@lucadiba/satispay-client";
 ```
 
-### Initialize the Client
+### Initialize the client
 
-You can get the `keyId` and `privateKey` using this package. See the [Authentication](#authentication) section for more details.
+Initialize the client with your `keyId` and `privateKey`. You can get both using this package. See the [Authentication](#authentication) section for more details.
 
 ```typescript
-const satispay = new SatispayClient({
+const satispay = new Satispay.Client({
   keyId: "ldg9sbq283og7ua1abpj989kbbm2g60us6f18c1sciq...",
   privateKey: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...",
-  environment: "sandbox", // or 'production'
+  environment: "sandbox", // optional, defaults to "production"
 });
 ```
 
-### Create a Payment
+### Create a payment
 
 ```typescript
 const paymentResponse = await satispay.payments.create({
@@ -53,12 +53,21 @@ const paymentResponse = await satispay.payments.create({
 
 if (paymentResponse.success) {
   const payment = paymentResponse.data;
+
+  // Save the payment id
   const paymentId = payment.id;
+
+  // Redirect the user to the redirectUrl
+  const redirectUrl = payment.redirect_url;
+
   // ...
+} else {
+  // Handle the error
+  const error = paymentResponse.error;
 }
 ```
 
-### Get a Payment
+### Get a payment
 
 ```typescript
 satispay.payments.get({
@@ -66,7 +75,7 @@ satispay.payments.get({
 });
 ```
 
-### Get All Payments
+### Get all payments
 
 ```typescript
 satispay.payments.getAll();
@@ -77,21 +86,25 @@ satispay.payments.getAll();
 The Satispay API uses an authentication method based on a RSA key pair. You can generate a new key pair using the `generateKeyPair` method:
 
 ```typescript
-import { SatispayAuthentication } from "@lucadiba/satispay-client";
+import Satispay from "@lucadiba/satispay-client";
 
-const { publicKey, privateKey } = SatispayAuthentication.generateKeyPair();
+const { publicKey, privateKey } = Satispay.Authentication.generateKeyPair();
 ```
 
-Then, you can use the `authenticateWithKeyPair` method to get the `keyId` needed to initialize the client.
+Then, you can use the `authenticateWithToken` method to get the `keyId` needed to initialize the client.
 The token is a 6 characters string that you can find in the Satispay Business Dashboard. It can only be used once, so you need to save the `keyId`, which can be reused and does not expire.
 
 ```typescript
-const { keyId } = SatispayAuthentication.authenticateWithToken({
+const { keyId } = Satispay.Authentication.authenticateWithToken({
   token: "623ECX",
   publicKey,
 });
+```
 
-const satispay = new SatispayClient({
+Finally, you can initialize the client:
+
+```typescript
+const satispay = new Satispay.Client({
   keyId,
   privateKey,
 });
