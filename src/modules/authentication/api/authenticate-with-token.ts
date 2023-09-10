@@ -1,5 +1,5 @@
 import { BASE_URLS } from "../../../const";
-import { makeRequest } from "../../../utils";
+import { makeRequest } from "../../../utils/api";
 import {
   AuthenticateWithTokenRequest,
   AuthenticateWithTokenResponse,

@@ -1,5 +1,5 @@
 import { BASE_URLS } from "../../const";
-import { makeAuthorizedRequest } from "../../utils";
+import { makeAuthorizedRequest } from "../../utils/api";
 import { ClientOptions } from ".";
 
 export class Api {
