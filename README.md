@@ -1,6 +1,22 @@
 <h1 align="center">Satispay Node.js client</h1>
 <h2 align="center">⚠️ This package is in beta ⚠️</h2>
 
+<p>
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white" />
+  <a href="https://www.npmjs.com/package/@lucadiba/satispay-client">
+    <img alt="NPM package" src="https://img.shields.io/npm/v/@lucadiba/satispay-client?color=blue" />
+  </a>
+  <a href="https://github.com/LucaDiba/satispay-client/actions/workflows/main.yml">
+    <img alt="CI build" src="https://github.com/LucaDiba/satispay-client/actions/workflows/main.yml/badge.svg" />
+  </a>
+  <a href="https://github.com/LucaDiba/satispay-client/graphs/commit-activity">
+    <img alt="Maintained" src="https://img.shields.io/badge/maintained-yes-brightgreen.svg" />
+  </a>
+  <a href="https://github.com/LucaDiba/satispay-client/blob/main/LICENSE">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/LucaDiba/satispay-client" />
+  </a>
+</p>
+
 > A JavaScript Node.js client for Satispay APIs with built-in TypeScript types.<br />
 > This package supports both ESM and CommonJS.
 
