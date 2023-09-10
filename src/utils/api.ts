@@ -24,7 +24,7 @@ function getAuthHeaders({
   const headers = {
     "(request-target)": `${httpVerb.toLowerCase()} ${httpEndpoint}`,
     host: httpBaseUrl.replace("https://", ""),
-    date: DateTime.now().toFormat("EEE, dd MMM yyyy HH:mm:ss O"),
+    date: DateTime.now().toFormat("EEE, dd MMM yyyy HH:mm:ss ZZZ"),
     digest,
   };
 
