@@ -18,3 +18,9 @@ jobs:
       - run: npm run lint
       - run: npm run test
       - run: npm run build
+
+      - name: Generate code coverage
+        run: npm run test --ci --coverage --maxWorkers=2
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
