@@ -1,5 +1,11 @@
 # @lucadiba/satispay-client
 
+## 0.1.5
+
+### Patch Changes
+
+- 99fa769: Add metadata to "create payment"
+
 ## 0.1.4
 
 ### Patch Changes
