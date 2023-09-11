@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { Settings } from "luxon";
 
 import { makeAuthorizedRequest, makeRequest } from "../api";
@@ -36,36 +36,81 @@ describe("makeRequest", () => {
     });
   });
 
-  test("should return success false and error when request is unsuccessful", async () => {
-    mockedAxios.request.mockRejectedValueOnce(
-      new AxiosError("Unauthorized", "401", undefined, undefined, {
-        data: { errors: [{ detail: "detail-text" }] },
-        status: 401,
-        statusText: "Unauthorized",
-        headers: {},
-        // @ts-expect-error mock
-        config: {},
-      })
-    );
+  describe("return success false and error when request is unsuccessful", () => {
+    describe("Axios error", () => {
+      test("Without response data", async () => {
+        mockedAxios.isAxiosError.mockReturnValue(true);
+        mockedAxios.request.mockRejectedValueOnce({});
 
-    const response = await makeRequest({
-      method: "GET",
-      url: "https://example.com/test",
+        const response = await makeRequest({
+          method: "GET",
+          url: "https://example.com/test",
+        });
+
+        expect(mockedAxios.request).toHaveBeenCalledTimes(1);
+        expect(mockedAxios.request).toHaveBeenCalledWith({
+          method: "GET",
+          url: "https://example.com/test",
+          headers: undefined,
+          data: undefined,
+        });
+
+        expect(response).toEqual({
+          success: false,
+          error: undefined,
+        });
+      });
+
+      test("With response data", async () => {
+        mockedAxios.isAxiosError.mockReturnValue(true);
+        mockedAxios.request.mockRejectedValueOnce({
+          response: { data: { errors: [{ detail: "detail-text" }] } },
+        });
+
+        const response = await makeRequest({
+          method: "GET",
+          url: "https://example.com/test",
+        });
+
+        expect(mockedAxios.request).toHaveBeenCalledTimes(1);
+        expect(mockedAxios.request).toHaveBeenCalledWith({
+          method: "GET",
+          url: "https://example.com/test",
+          headers: undefined,
+          data: undefined,
+        });
+
+        expect(response).toEqual({
+          success: false,
+          error: {
+            errors: [{ detail: "detail-text" }],
+          },
+        });
+      });
     });
 
-    expect(mockedAxios.request).toHaveBeenCalledTimes(1);
-    expect(mockedAxios.request).toHaveBeenCalledWith({
-      method: "GET",
-      url: "https://example.com/test",
-      headers: undefined,
-      data: undefined,
-    });
+    test("Generic error", async () => {
+      mockedAxios.isAxiosError.mockReturnValue(false);
+      mockedAxios.request.mockRejectedValueOnce(new Error("Generic error"));
 
-    expect(response).toEqual(
-      expect.objectContaining({
+      const response = await makeRequest({
+        method: "GET",
+        url: "https://example.com/test",
+      });
+
+      expect(mockedAxios.request).toHaveBeenCalledTimes(1);
+      expect(mockedAxios.request).toHaveBeenCalledWith({
+        method: "GET",
+        url: "https://example.com/test",
+        headers: undefined,
+        data: undefined,
+      });
+
+      expect(response).toEqual({
         success: false,
-      })
-    );
+        error: new Error("Generic error"),
+      });
+    });
   });
 });
 

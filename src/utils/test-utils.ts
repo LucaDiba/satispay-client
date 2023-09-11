@@ -1,3 +1,5 @@
+export const TEST_KEY_ID = "test-key-id";
+
 export const TEST_PRIVATE_KEY = `-----BEGIN RSA PRIVATE KEY-----
 MIICXAIBAAKBgGyeUlqu7/L9tMVC+vIGMMXF6asjQKDN/vzurDbG3UNqQyc9Hwm4
 sTBJfqNfw+JiZSVc2iTdD5YaLpXzkYigMU6n5f3w8lD+y9SeLG/J2YXiIhCnncla

@@ -9,6 +9,7 @@
   <a href="https://github.com/LucaDiba/satispay-client/actions/workflows/main.yml">
     <img alt="CI build" src="https://github.com/LucaDiba/satispay-client/actions/workflows/main.yml/badge.svg" />
   </a>
+  <img src="https://codecov.io/gh/LucaDiba/satispay-client/graph/badge.svg?token=6TAXMAW7PP"/>
   <a href="https://github.com/LucaDiba/satispay-client/graphs/commit-activity">
     <img alt="Maintained" src="https://img.shields.io/badge/maintained-yes-brightgreen.svg" />
   </a>
