@@ -31,6 +31,14 @@ type BaseCreatePaymentRequest = {
    * The expiration date of the payment.
    */
   expirationDate?: string;
+
+  /**
+   * The payment metadata.
+   *
+   * This generic field can contain up to 20 key-value items with a maximum length of 45 for the key and of 500 chars for the value.
+   * The field `phone_number` can be defined to pre-fill the mobile phone number.
+   */
+  metadata?: object;
 };
 
 export type CreatePaymentRequest =

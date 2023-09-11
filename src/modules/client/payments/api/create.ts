@@ -11,6 +11,7 @@ export class CreatePayment extends Api {
       callback_url: request.callbackUrl,
       redirect_url: request.redirectUrl,
       expiration_date: request.expirationDate,
+      metadata: request.metadata,
     } as Record<string, unknown>;
 
     if (request.flow === "PRE_AUTHORIZED") {
