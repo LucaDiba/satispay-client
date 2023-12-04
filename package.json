@@ -29,7 +29,7 @@
     "luxon": "^3.4.4"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.26.2",
+    "@changesets/cli": "^2.27.1",
     "@types/jest": "^29.5.10",
     "@types/luxon": "^3.3.6",
     "eslint": "^8.54.0",
