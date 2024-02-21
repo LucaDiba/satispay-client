@@ -62,26 +62,17 @@ const satispay = new Satispay.Client({
 ### Create a payment
 
 ```typescript
-const paymentResponse = await satispay.payments.create({
+const payment = await satispay.payments.create({
   flow: "MATCH_CODE",
   amountUnit: 100,
   currency: "EUR",
 });
 
-if (paymentResponse.success) {
-  const payment = paymentResponse.data;
+// Save the payment id
+const paymentId = payment.id;
 
-  // Save the payment id
-  const paymentId = payment.id;
-
-  // Redirect the user to the redirectUrl
-  const redirectUrl = payment.redirect_url;
-
-  // ...
-} else {
-  // Handle the error
-  const error = paymentResponse.error;
-}
+// Redirect the user to the redirectUrl
+const redirectUrl = payment.redirect_url;
 ```
 
 ### Get a payment
@@ -135,6 +126,39 @@ const satispay = new Satispay.Client({
   keyId,
   privateKey,
 });
+```
+
+## Errors
+
+### Handling errors
+
+This package throws an error when the Satispay API returns an error. You can catch the error and handle it as you prefer.
+
+If the errors comes from the Satispay API, the error will be an instance of `SatispayError`. There is a utility method to check if an error is a `SatispayError`.
+
+```typescript
+import { SatispayError } from "@lucadiba/satispay-client";
+
+try {
+  await satispay.payments.create({
+    flow: "MATCH_CODE",
+    amountUnit: -100,
+    currency: "EUR",
+  });
+} catch (error) {
+  if (SatispayError.isSatispayError(error)) {
+    // The SatispayError type is automatically inferred
+    console.error({
+      message: error.message,
+      data: error.data,
+      code: error.code,
+      status: error.status,
+    });
+  } else {
+    // The type of error is unknown
+    console.error(error);
+  }
+}
 ```
 
 ## Contributing

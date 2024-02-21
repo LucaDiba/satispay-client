@@ -92,10 +92,7 @@ test("MATCH_CODE", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });
 
 test("PRE_AUTHORIZED", async () => {
@@ -135,10 +132,7 @@ test("PRE_AUTHORIZED", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });
 
 test("REFUND", async () => {
@@ -179,10 +173,7 @@ test("REFUND", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });
 
 test("MATCH_USER", async () => {
@@ -223,8 +214,5 @@ test("MATCH_USER", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });

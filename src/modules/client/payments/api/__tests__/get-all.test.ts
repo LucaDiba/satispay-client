@@ -86,10 +86,7 @@ test("Without parameters", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });
 
 test("With parameters", async () => {
@@ -119,8 +116,5 @@ test("With parameters", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });

@@ -2,6 +2,8 @@ import axios, { type AxiosError } from "axios";
 import crypto from "crypto";
 import { DateTime } from "luxon";
 
+import SatispayError from "../errors/SatispayError";
+
 function getAuthHeaders({
   keyId,
   privateKey,
@@ -59,16 +61,7 @@ export async function makeRequest<T>({
   url: string;
   body?: unknown;
   headers?: Record<string, string>;
-}): Promise<
-  | {
-      success: true;
-      data: T;
-    }
-  | {
-      success: false;
-      error: unknown;
-    }
-> {
+}): Promise<T> {
   try {
     const response = await axios.request<T>({
       method,
@@ -77,22 +70,20 @@ export async function makeRequest<T>({
       data: body,
     });
 
-    return {
-      success: true,
-      data: response.data as T,
-    };
+    return response.data;
   } catch (err: AxiosError | unknown) {
     if (axios.isAxiosError(err)) {
-      return {
-        success: false,
-        error: (err as AxiosError).response?.data,
-      };
+      const axiosError = err as AxiosError;
+
+      throw new SatispayError({
+        message: axiosError.message,
+        data: axiosError.response?.data,
+        code: axiosError.code || "UNKNOWN",
+        status: axiosError.status || 500,
+      });
     }
 
-    return {
-      success: false,
-      error: err,
-    };
+    throw err;
   }
 }
 

@@ -83,10 +83,7 @@ test("Without amount unit", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });
 
 test("With amount unit", async () => {
@@ -119,8 +116,5 @@ test("With amount unit", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });

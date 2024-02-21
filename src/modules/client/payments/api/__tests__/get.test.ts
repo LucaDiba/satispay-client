@@ -79,8 +79,5 @@ test("Get payment", async () => {
     },
   });
 
-  expect(response).toEqual({
-    success: true,
-    data: expectedReturnData,
-  });
+  expect(response).toEqual(expectedReturnData);
 });
