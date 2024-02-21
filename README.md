@@ -1,5 +1,4 @@
 <h1 align="center">Satispay Node.js client</h1>
-<h2 align="center">⚠️ This package is in beta ⚠️</h2>
 
 <p>
   <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white" />
