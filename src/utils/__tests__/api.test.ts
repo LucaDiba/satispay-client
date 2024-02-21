@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Settings } from "luxon";
 
+import SatispayError from "../../errors/SatispayError";
 import { makeAuthorizedRequest, makeRequest } from "../api";
 import { TEST_PRIVATE_KEY } from "../test-utils";
 
@@ -30,10 +31,7 @@ describe("makeRequest", () => {
       data: undefined,
     });
 
-    expect(response).toEqual({
-      success: true,
-      data: { data: "data" },
-    });
+    expect(response).toEqual({ data: "data" });
   });
 
   describe("return success false and error when request is unsuccessful", () => {
@@ -42,10 +40,20 @@ describe("makeRequest", () => {
         mockedAxios.isAxiosError.mockReturnValue(true);
         mockedAxios.request.mockRejectedValueOnce({});
 
-        const response = await makeRequest({
-          method: "GET",
-          url: "https://example.com/test",
-        });
+        try {
+          await makeRequest({
+            method: "GET",
+            url: "https://example.com/test",
+          });
+          fail("Should throw");
+        } catch (err) {
+          const error = err as SatispayError;
+          expect(error.name).toBe("SatispayError");
+          expect(error.message).toBe("");
+          expect(error.data).toBeUndefined();
+          expect(error.code).toBe("UNKNOWN");
+          expect(error.status).toBe(500);
+        }
 
         expect(mockedAxios.request).toHaveBeenCalledTimes(1);
         expect(mockedAxios.request).toHaveBeenCalledWith({
@@ -53,11 +61,6 @@ describe("makeRequest", () => {
           url: "https://example.com/test",
           headers: undefined,
           data: undefined,
-        });
-
-        expect(response).toEqual({
-          success: false,
-          error: undefined,
         });
       });
 
@@ -67,10 +70,20 @@ describe("makeRequest", () => {
           response: { data: { errors: [{ detail: "detail-text" }] } },
         });
 
-        const response = await makeRequest({
-          method: "GET",
-          url: "https://example.com/test",
-        });
+        try {
+          await makeRequest({
+            method: "GET",
+            url: "https://example.com/test",
+          });
+          fail("Should throw");
+        } catch (err) {
+          const error = err as SatispayError;
+          expect(error.name).toBe("SatispayError");
+          expect(error.message).toBe("");
+          expect(error.data).toEqual({ errors: [{ detail: "detail-text" }] });
+          expect(error.code).toBe("UNKNOWN");
+          expect(error.status).toBe(500);
+        }
 
         expect(mockedAxios.request).toHaveBeenCalledTimes(1);
         expect(mockedAxios.request).toHaveBeenCalledWith({
@@ -79,13 +92,6 @@ describe("makeRequest", () => {
           headers: undefined,
           data: undefined,
         });
-
-        expect(response).toEqual({
-          success: false,
-          error: {
-            errors: [{ detail: "detail-text" }],
-          },
-        });
       });
     });
 
@@ -93,10 +99,20 @@ describe("makeRequest", () => {
       mockedAxios.isAxiosError.mockReturnValue(false);
       mockedAxios.request.mockRejectedValueOnce(new Error("Generic error"));
 
-      const response = await makeRequest({
-        method: "GET",
-        url: "https://example.com/test",
-      });
+      try {
+        await makeRequest({
+          method: "GET",
+          url: "https://example.com/test",
+        });
+        fail("Should throw");
+      } catch (err) {
+        const error = err as Error;
+        expect(error.name).toBe("Error");
+        expect(error.message).toBe("Generic error");
+        expect("data" in error).toBe(false);
+        expect("code" in error).toBe(false);
+        expect("status" in error).toBe(false);
+      }
 
       expect(mockedAxios.request).toHaveBeenCalledTimes(1);
       expect(mockedAxios.request).toHaveBeenCalledWith({
@@ -104,11 +120,6 @@ describe("makeRequest", () => {
         url: "https://example.com/test",
         headers: undefined,
         data: undefined,
-      });
-
-      expect(response).toEqual({
-        success: false,
-        error: new Error("Generic error"),
       });
     });
   });
@@ -150,10 +161,7 @@ describe("makeAuthorizedRequest", () => {
         data: undefined,
       });
 
-      expect(response).toEqual({
-        success: true,
-        data: { data: "data" },
-      });
+      expect(response).toEqual({ data: "data" });
     });
 
     test("use body with body", async () => {
@@ -196,10 +204,7 @@ describe("makeAuthorizedRequest", () => {
         },
       });
 
-      expect(response).toEqual({
-        success: true,
-        data: { data: "data" },
-      });
+      expect(response).toEqual({ data: "data" });
     });
   });
 });
