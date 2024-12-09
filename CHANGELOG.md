@@ -1,5 +1,11 @@
 # @lucadiba/satispay-client
 
+## 1.0.1
+
+### Patch Changes
+
+- 1b3126b: Bump dependencies
+
 ## 1.0.0
 
 ### Major Changes
