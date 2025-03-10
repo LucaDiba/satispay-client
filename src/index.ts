@@ -2,7 +2,7 @@ import SatispayError from "./errors/SatispayError";
 import { Authentication } from "./modules/authentication";
 import { Client } from "./modules/client";
 
-const Satispay = {
+export const Satispay = {
   Client,
   Authentication,
   SatispayError,
