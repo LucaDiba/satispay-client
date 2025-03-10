@@ -43,7 +43,7 @@ npm install @lucadiba/satispay-client
 Import the package in your Node.js application:
 
 ```typescript
-import Satispay from "@lucadiba/satispay-client";
+import { Satispay } from "@lucadiba/satispay-client";
 ```
 
 ### Initialize the client
@@ -102,7 +102,7 @@ satispay.payments.update({
 The Satispay API uses an authentication method based on a RSA key pair. You can generate a new key pair using the `generateKeyPair` method:
 
 ```typescript
-import Satispay from "@lucadiba/satispay-client";
+import { Satispay } from "@lucadiba/satispay-client";
 
 const { publicKey, privateKey } =
   await Satispay.Authentication.generateKeyPair();
