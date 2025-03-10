@@ -1,5 +1,12 @@
 # @lucadiba/satispay-client
 
+## 1.0.2
+
+### Patch Changes
+
+- ff90e04: - Address type issue in ESM modules.
+  - Bump dependencies
+
 ## 1.0.1
 
 ### Patch Changes
